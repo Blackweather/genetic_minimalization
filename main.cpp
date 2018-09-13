@@ -97,26 +97,28 @@ int main() {
 
 		win = GetBestPopulation(population);
 		double currentFit = population->population[win]->fitness;
+		cout << "Fitness: " << currentFit << endl;
+
 		if (currentFit > bestFit) {
 			if (noImprovement > 15) {
-				cout << "FINAL: " << bestFit << endl;
 				break;
 			}
 			else {
 				noImprovement++;
-				cout << "Fitness: " << currentFit << endl;
 			}
 		}
-		else  if (bestFit - currentFit < 0.0001) {
+		/*else  if (bestFit - currentFit < 0.0001) {
 			bestFit = currentFit;
 			cout << "FINAL: " << bestFit << endl;
 			break;
-		}
+		}*/
 		else {
 			bestFit = currentFit;
+			noImprovement = 0;
 		}
-		cout << "Fitness: " << currentFit << endl;
 	}
+
+	cout << "FINAL: " << bestFit << endl;
 
 	delete onp;
 	delete population;
