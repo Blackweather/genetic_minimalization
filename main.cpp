@@ -61,7 +61,7 @@ int main() {
 
 	// randomly create initial population
 	// population is array of all variables
-	const int POPULATION_NUMBER = 1000;
+	const int POPULATION_NUMBER = 20;
 
 	Population* population = new Population(numberOfArguments, POPULATION_NUMBER);
 
@@ -89,9 +89,29 @@ int main() {
 	// - next x iterations no longer produce better results
 
 	int noImprovement = 0;
+
+	cout << "GENERATION 1\n";
+	for (int i = 0; i < population->populationCount; i++) {
+		for (int j = 0; j < population->numberOfArguments; j++) {
+			cout << population->population[i]->functionArguments[j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+
 	// new population
-	for (int i = 0; i < 10 * timeLimit; i++) {
-		NewGeneration(population);
+	for (int i = 0; i < 1000 * timeLimit; i++) {
+
+
+		NewGeneration(population, argumentRanges);
+
+		cout << "GENERATION " << i + 2 << endl;
+		for (int i = 0; i < population->populationCount; i++) {
+			for (int j = 0; j < population->numberOfArguments; j++) {
+				cout << population->population[i]->functionArguments[j] << " ";
+			}
+			cout << endl;
+		}
 
 		CalculateFitness(population, *onp);
 
@@ -99,7 +119,7 @@ int main() {
 		double currentFit = population->population[win]->fitness;
 		cout << "Fitness: " << currentFit << endl;
 
-		if (currentFit > bestFit) {
+		if (abs(currentFit - bestFit) < 0.001) {
 			if (noImprovement > 15) {
 				break;
 			}
@@ -107,11 +127,6 @@ int main() {
 				noImprovement++;
 			}
 		}
-		/*else  if (bestFit - currentFit < 0.0001) {
-			bestFit = currentFit;
-			cout << "FINAL: " << bestFit << endl;
-			break;
-		}*/
 		else {
 			bestFit = currentFit;
 			noImprovement = 0;
@@ -119,6 +134,12 @@ int main() {
 	}
 
 	cout << "FINAL: " << bestFit << endl;
+
+	int tmp = (int)(bestFit * 100);
+	double answer = tmp;
+	answer /= 100;
+
+	cout << "ANSWER: " << answer << endl;
 
 	delete onp;
 	delete population;

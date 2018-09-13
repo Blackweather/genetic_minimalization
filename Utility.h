@@ -10,7 +10,6 @@ struct Range {
 
 struct PopulationStruct {
 	double* functionArguments;
-	double probability;
 	double fitness;
 
 	PopulationStruct(const int numberOfArguments);
@@ -42,11 +41,11 @@ int RouletteSelection(Population* population);
 
 int TournamentSelection(Population* population);
 
-void NewGeneration(Population* population);
+void NewGeneration(Population* population, Range* argumentRanges);
 
 double* CrossOver(double* first, double* second, int numberOfValues);
 
-void MutatePopulation(Population* population);
-void Mutate(double* number);
+void MutatePopulation(Population* population, Range* argumentRanges);
+void Mutate(double* number, Range range);
 
 #endif

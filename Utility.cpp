@@ -148,7 +148,7 @@ int TournamentSelection(Population * population) {
 	return winner;
 }
 
-void NewGeneration(Population* population) {
+void NewGeneration(Population* population, Range* argumentRanges) {
 	// SELECTION:
 	// half population through roulette select
 	// half population - crossover from selected parents from first half
@@ -249,27 +249,28 @@ double* CrossOver(double* first, double* second, int numberOfValues) {
 	return result;
 }
 
-void MutatePopulation(Population* population) {
+void MutatePopulation(Population* population, Range* argumentRanges) {
 	// MUTATION
-	const int MUTATION_PROBABILITY = 0.02;
+	const int MUTATION_PROBABILITY = 0.1;
 
 	for (int i = 0; i < population->populationCount; i++) {
-		// each argument has probability to mutate
 		for (int j = 0; j < population->numberOfArguments; j++) {
 
 			double mutationTry = (double)rand() / RAND_MAX;
 
 			if (mutationTry <= MUTATION_PROBABILITY) {
-				Mutate(&population->population[i]->functionArguments[j]);
+				Mutate(&population->population[i]->functionArguments[j],argumentRanges[j]);
 			}
 		}
 	}
 }
 
-void Mutate(double* number) {
+void Mutate(double* number, Range range) {
 	// generate a small number
-	const double MIN = 0.1;
-	const double MAX = 0.2;
+	/*double MIN = *number / 10;
+	double MAX = MIN * 2;*/
+	const double MIN = 0.6;
+	const double MAX = 0.9;
 	double mutation = GenerateRandom(MIN, MAX);
 
 	// decide if addition or substraction
@@ -279,5 +280,19 @@ void Mutate(double* number) {
 		mutation *= -1;
 	}
 
-	*number += mutation;
+	double result = *number*mutation;
+
+	while (result > range.end || result < range.begin) {
+		mutation = GenerateRandom(MIN, MAX);
+
+		random = (double)rand() / RAND_MAX;
+
+		if (random < 0.5) {
+			mutation *= -1;
+		}
+
+		result = *number*mutation;
+	}
+
+	*number = result;
 }
