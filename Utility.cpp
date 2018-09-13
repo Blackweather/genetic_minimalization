@@ -211,7 +211,7 @@ void NewGeneration(Population* population, Range* argumentRanges) {
 
 	// END OF SELECTION/CROSSOVER
 
-	MutatePopulation(population);
+	MutatePopulation(population,argumentRanges);
 }
 
 double* CrossOver(double* first, double* second, int numberOfValues) {
