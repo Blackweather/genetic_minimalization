@@ -109,41 +109,77 @@ int RouletteSelection(Population* population) {
 
 }
 
+int TournamentSelection(Population * population) {
+	const int TOURNAMENT_SIZE = 8;
+	int contestantsLeft = TOURNAMENT_SIZE;
+
+	int* contestants = new int[TOURNAMENT_SIZE];
+
+	// get random contestants
+	for (int i = 0; i < TOURNAMENT_SIZE; i++) {
+		contestants[i] = rand() % population->populationCount;
+	}
+
+	do {
+		contestantsLeft /= 2;
+		int* winners = new int[contestantsLeft];
+		for (int i = 0; i < contestantsLeft; i++) {
+			// contenstant[2*i] vs contestant[2*i+1]
+			if (population->population[contestants[2 * i]]->fitness < population->population[contestants[(2 * i) + 1]]->fitness) {
+				winners[i] = contestants[2 * i];
+			}
+			else {
+				winners[i] = contestants[(2 * i) + 1];
+			}
+		}
+		// new round
+		delete[] contestants;
+		contestants = new int[contestantsLeft];
+		for (int i = 0; i < contestantsLeft; i++) {
+			contestants[i] = winners[i];
+		}
+		delete[] winners;
+	} while (contestantsLeft != 1);
+
+	int winner = contestants[0];
+
+	delete[] contestants;
+
+	return winner;
+}
+
 void NewGeneration(Population* population) {
 	// SELECTION:
 	// half population through roulette select
 	// half population - crossover from selected parents from first half
 	// mutation
 
-	Population* firstHalf = new Population(population->numberOfArguments, 
+	Population* firstHalf = new Population(population->numberOfArguments,
 		population->populationCount / 2);
 
 	// fill with roulette select
 	for (int i = 0; i < firstHalf->populationCount; i++) {
-		int selected = RouletteSelection(population);
+		//int selected = RouletteSelection(population);
+		int selected = TournamentSelection(population);
 
 		// copy array
 		for (int j = 0; j < population->numberOfArguments; j++) {
 			firstHalf->population[i]->functionArguments[j] =
 				population->population[selected]->functionArguments[j];
-
-			// DEBUG
-			printf("SELECTED = %d, j = %d\n", selected, j);
-			cout << population->population[selected]->functionArguments[j] << endl;
 		}
 	}
 
 
 	Population* secondHalf = new Population(population->numberOfArguments,
 		population->populationCount - (population->populationCount / 2));
-	
+
 	for (int i = 0; i < secondHalf->populationCount; i++) {
 		// fill with cross over
 		int firstParent = rand() % firstHalf->populationCount;
 		int secondParent;
 		do {
 			secondParent = rand() % firstHalf->populationCount;
-		} while (secondParent==firstParent);
+		} while (secondParent == firstParent);
 
 		double* child = CrossOver(firstHalf->population[firstParent]->functionArguments,
 			firstHalf->population[secondParent]->functionArguments,
@@ -239,7 +275,7 @@ void Mutate(double* number) {
 	// decide if addition or substraction
 	double random = (double)rand() / RAND_MAX;
 
-	if (random<0.5) {
+	if (random < 0.5) {
 		mutation *= -1;
 	}
 

@@ -49,7 +49,6 @@ int main() {
 	// read argument ranges
 	for (int i = 0; i < numberOfArguments; i++) {
 		cin >> argumentRanges[i].begin >> argumentRanges[i].end;
-		cout << "CHECK: " << argumentRanges[i].begin << " " << argumentRanges[i].end << endl;
 	}
 
 #pragma endregion
@@ -78,16 +77,18 @@ int main() {
 	CalculateFitness(population, *onp);
 
 	int win = GetBestPopulation(population);
-	printf("Fitness = %f\n", population->population[win]->fitness);
-	for (int i = 0; i < population->numberOfArguments; i++) {
-		cout << population->population[win]->functionArguments[i] << endl;
-	}
-	cout << endl;
+	double bestFit = population->population[win]->fitness;
+	cout << "Fitness: " << bestFit << endl;
 
 	// MAIN LOOP:
 	// - SELECTION WITH CROSSOVER
 	// - MUTATION
 
+	// TERMINATION:
+	// - fixed number of generations reached
+	// - next x iterations no longer produce better results
+
+	int noImprovement = 0;
 	// new population
 	for (int i = 0; i < 10 * timeLimit; i++) {
 		NewGeneration(population);
@@ -95,15 +96,27 @@ int main() {
 		CalculateFitness(population, *onp);
 
 		win = GetBestPopulation(population);
-		printf("Fitness = %f\n", population->population[win]->fitness);
-		for (int i = 0; i < population->numberOfArguments; i++) {
-			cout << population->population[win]->functionArguments[i] << endl;
+		double currentFit = population->population[win]->fitness;
+		if (currentFit > bestFit) {
+			if (noImprovement > 15) {
+				cout << "FINAL: " << bestFit << endl;
+				break;
+			}
+			else {
+				noImprovement++;
+				cout << "Fitness: " << currentFit << endl;
+			}
 		}
-		cout << endl;
+		else  if (bestFit - currentFit < 0.0001) {
+			bestFit = currentFit;
+			cout << "FINAL: " << bestFit << endl;
+			break;
+		}
+		else {
+			bestFit = currentFit;
+		}
+		cout << "Fitness: " << currentFit << endl;
 	}
-
-	double args[10] = { 0,0,0,0,0,0,0,0,0,0 };
-	cout << onp->CalculateFunction(args, 10) << endl;
 
 	delete onp;
 	delete population;

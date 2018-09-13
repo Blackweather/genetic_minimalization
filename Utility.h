@@ -40,6 +40,8 @@ int GetBestPopulation(Population* population);
 
 int RouletteSelection(Population* population);
 
+int TournamentSelection(Population* population);
+
 void NewGeneration(Population* population);
 
 double* CrossOver(double* first, double* second, int numberOfValues);

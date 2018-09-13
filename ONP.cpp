@@ -32,18 +32,13 @@ double ONP::CalculateFunction(double* arguments, const int argumentCount) {
 	while (split != NULL) {
 		char* operation = split;
 		// for each operation check if variable else parseOperation
-		//cout << operation << endl;
 		if (strcmp(operation, "x") == 0 || strcmp(operation, "y") == 0
 			|| strcmp(operation, "z") == 0 || strcmp(operation, "a") == 0
 			|| strcmp(operation, "b") == 0 || strcmp(operation, "c") == 0
 			|| strcmp(operation, "d") == 0 || strcmp(operation, "e") == 0
 			|| strcmp(operation, "f") == 0 || strcmp(operation, "g") == 0) {
-			// variable
 			// push corresponding variable onto stack
 			stack->Push(*(arguments + variableNameToNumber(*operation)));
-			/*stack->Push(*(arguments+i));
-			i++;*/
-			// remeber argument name somewhere
 		}
 		else {
 			//parse
