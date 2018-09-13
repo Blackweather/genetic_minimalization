@@ -268,8 +268,8 @@ void MutatePopulation(Population* population) {
 
 void Mutate(double* number) {
 	// generate a small number
-	const int MIN = 0.1;
-	const int MAX = 0.2;
+	const double MIN = 0.1;
+	const double MAX = 0.2;
 	double mutation = GenerateRandom(MIN, MAX);
 
 	// decide if addition or substraction

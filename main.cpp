@@ -61,7 +61,7 @@ int main() {
 
 	// randomly create initial population
 	// population is array of all variables
-	const int POPULATION_NUMBER = 10;
+	const int POPULATION_NUMBER = 1000;
 
 	Population* population = new Population(numberOfArguments, POPULATION_NUMBER);
 
