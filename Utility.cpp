@@ -23,28 +23,6 @@ Population::~Population() {
 	delete this->population;
 }
 
-
-
-void CharConcat(char* arr1, char* arr2) {
-	int firstLen = CountArray(arr1,0,0);
-	int secondLen = CountArray(arr2, 0, 0);
-	char* result = (char*)malloc((firstLen + secondLen + 1) * sizeof(char));
-	for (int i = 0; i < firstLen; i++) {
-		result[i] = arr1[i];
-	}
-	for (int i = firstLen; i < firstLen+secondLen; i++) {
-		result[i] = arr2[i - firstLen];
-	}
-	result[firstLen + secondLen] = '\0';
-
-	arr1 = (char*)realloc(arr1,(firstLen + secondLen + 1) * sizeof(char));
-	for (int i = 0; i < firstLen+secondLen+1; i++) {
-		arr1[i] = result[i];
-	}
-	free(result);
-	result = NULL;
-}
-
 double GenerateRandom(double min, double max) {
 	double range = max - min;
 	double div = RAND_MAX / range;
@@ -106,8 +84,6 @@ int GetBestPopulation(Population* population) {
 		}
 	}
 
-	cout << "Best Population #" << popNumber << endl;
-
 	return popNumber;
 }
 
@@ -134,15 +110,7 @@ int RouletteSelection(Population* population) {
 }
 
 void NewGeneration(Population* population) {
-	// SELECTION
-	// select same number of organisms using roulette wheel selection
-
-	/*cout << "\nDEBUG\n\n";
-	for (size_t i = 0; i < population->populationCount; i++) {
-		cout << population->population[i]->functionArguments[0] << endl;
-	}*/
-
-	// Solution:
+	// SELECTION:
 	// half population through roulette select
 	// half population - crossover from selected parents from first half
 	// mutation
@@ -177,19 +145,9 @@ void NewGeneration(Population* population) {
 			secondParent = rand() % firstHalf->populationCount;
 		} while (secondParent==firstParent);
 
-		// DEBUG
-		printf("\nPARENTS: 1) %d, 2) %d", firstParent, secondParent);
-
 		double* child = CrossOver(firstHalf->population[firstParent]->functionArguments,
 			firstHalf->population[secondParent]->functionArguments,
 			firstHalf->numberOfArguments);
-
-		// DEBUG
-		printf("\nCHILD: ");
-		for (int i = 0; i < firstHalf->numberOfArguments; i++) {
-			cout << child[i] << " ";
-		}
-		cout << endl;
 
 		// add child to second half
 		secondHalf->population[i]->functionArguments = child;
@@ -230,7 +188,6 @@ double* CrossOver(double* first, double* second, int numberOfValues) {
 		// get the average
 		result[0] = (first[0] + second[0]) / 2;
 		// add a small mutation
-		// 0.9 - 1.0
 		double mutation = GenerateRandom(0.9, 1.0);
 
 		result[0] *= mutation;
@@ -258,18 +215,15 @@ double* CrossOver(double* first, double* second, int numberOfValues) {
 
 void MutatePopulation(Population* population) {
 	// MUTATION
-	// one bit mutation - negate random bit
 	const int MUTATION_PROBABILITY = 0.02;
 
 	for (int i = 0; i < population->populationCount; i++) {
 		// each argument has probability to mutate
-		// mutation - swap digits in number
 		for (int j = 0; j < population->numberOfArguments; j++) {
 
 			double mutationTry = (double)rand() / RAND_MAX;
 
 			if (mutationTry <= MUTATION_PROBABILITY) {
-				// will mutate
 				Mutate(&population->population[i]->functionArguments[j]);
 			}
 		}

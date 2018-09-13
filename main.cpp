@@ -77,18 +77,6 @@ int main() {
 
 	CalculateFitness(population, *onp);
 
-	//// check print populations by printing
-	//	for (int i = 0; i < population->populationCount; i++) {
-	//		cout << "\nPopulation number: " << i << endl;
-	//		for (int j = 0; j < population->numberOfArguments; j++) {
-	//			cout << population->population[i]->functionArguments[j] << endl;
-	//		}
-	//		cout << "Fitness: " << population->population[i]->fitness << endl;
-	//		//cout << "Probability: " << population->population[i]->probability << endl << endl;
-	//	}
-	//cout << "Fitness sum: " << GetFitnessSum(population)<<endl;
-
-	//cout << endl;
 	int win = GetBestPopulation(population);
 	printf("Fitness = %f\n", population->population[win]->fitness);
 	for (int i = 0; i < population->numberOfArguments; i++) {
@@ -113,19 +101,6 @@ int main() {
 		}
 		cout << endl;
 	}
-
-	// check if not stop
-
-	// loop while not time limit or best solution
-	// time limit - use time*1000 to get number of iterations
-
-	// calculate fitness based on given function - we need lowest fitness possible
-
-
-	// selection - select same number of organisms based on probability (roulette wheel)
-
-
-	// stop if worse fitness or end of range or time limit
 
 	double args[10] = { 0,0,0,0,0,0,0,0,0,0 };
 	cout << onp->CalculateFunction(args, 10) << endl;

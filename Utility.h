@@ -3,8 +3,6 @@
 
 #include "ONP.h"
 
-void CharConcat(char* arr1, char* arr2);
-
 struct Range {
 	double begin;
 	double end;
@@ -44,13 +42,9 @@ int RouletteSelection(Population* population);
 
 void NewGeneration(Population* population);
 
-void CrossOverPopulation(Population* population);
 double* CrossOver(double* first, double* second, int numberOfValues);
 
 void MutatePopulation(Population* population);
 void Mutate(double* number);
-
-bool isOptimalSolution(Population* population);
-
 
 #endif

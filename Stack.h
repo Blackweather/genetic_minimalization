@@ -4,8 +4,7 @@
 #include <stddef.h>
 
 typedef double Data;
-// TODO:
-// change names to stack instead of Stack 
+
 struct LNode {
 	Data data;
 	struct LNode* next;
